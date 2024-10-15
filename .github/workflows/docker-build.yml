@@ -41,8 +41,6 @@ jobs:
             nasm \
             libntlm0-dev
 
-        RUN pip3 install meson ninja cmake
-
         WORKDIR /build
 
         RUN git clone https://github.com/Quedale/OnvifDeviceManager.git
