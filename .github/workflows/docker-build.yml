@@ -1,4 +1,4 @@
-name: Docker Build and Package
+name: Build OnvifDeviceManager deb package
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Build Docker image
+    - name: Build Docker image and deb package
       uses: docker/build-push-action@v4
       with:
         context: .
@@ -26,14 +26,13 @@ jobs:
         outputs: type=docker,dest=/tmp/onvif-device-manager.tar
 
     - name: Load Docker image
-      run: |
-        docker load --input /tmp/onvif-device-manager.tar
-        docker image ls -a
+      run: docker load --input /tmp/onvif-device-manager.tar
 
-    - name: Run Docker container to build deb package
+    - name: Copy deb package from Docker container
       run: |
-        docker run --name onvif-build onvif-device-manager:latest
-        docker cp onvif-build:/build/OnvifDeviceManager/*.deb ./
+        container_id=$(docker create onvif-device-manager:latest)
+        docker cp $container_id:/*.deb ./
+        docker rm $container_id
 
     - name: Upload deb package
       uses: actions/upload-artifact@v3
