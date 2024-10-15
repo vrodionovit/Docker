@@ -28,7 +28,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /build
 
 # Клонируем репозиторий
-RUN git clone https://github.com/Quedale/OnvifDeviceManager.git
+#RUN git clone https://github.com/Quedale/OnvifDeviceManager.git
+RUN git clone https://github.com/vrodionovit/OnvifDeviceManager
 
 WORKDIR /build/OnvifDeviceManager
 
