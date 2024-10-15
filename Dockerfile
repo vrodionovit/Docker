@@ -33,7 +33,8 @@ RUN git clone https://github.com/Quedale/OnvifDeviceManager.git
 WORKDIR /build/OnvifDeviceManager
 
 # Запускаем скрипт autogen.sh
-RUN ./autogen.sh --prefix=$(pwd)/dist --enable-latest
+# RUN ./autogen.sh --prefix=$(pwd)/dist --enable-latest
+RUN bash -x ./autogen.sh --prefix=$(pwd)/dist --enable-latest
 
 # Команда по умолчанию для сборки deb пакета
 CMD ["make", "deb"]
