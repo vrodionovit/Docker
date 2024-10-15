@@ -1,4 +1,4 @@
-name: Build OnvifDeviceManager deb package
+name: Build OnvifDeviceManager
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Build Docker image and deb package
+    - name: Build Docker image
       uses: docker/build-push-action@v4
       with:
         context: .
@@ -28,14 +28,36 @@ jobs:
     - name: Load Docker image
       run: docker load --input /tmp/onvif-device-manager.tar
 
-    - name: Copy deb package from Docker container
+    - name: Copy binary from Docker container
       run: |
         container_id=$(docker create onvif-device-manager:latest)
-        docker cp $container_id:/*.deb ./
+        docker cp $container_id:/OnvifDeviceManager/onvifmgr ./onvifmgr
         docker rm $container_id
 
-    - name: Upload deb package
+    - name: Upload binary
       uses: actions/upload-artifact@v3
       with:
-        name: onvif-device-manager-deb
-        path: ./*.deb
+        name: onvifmgr
+        path: ./onvifmgr
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./onvifmgr
+        asset_name: onvifmgr
+        asset_content_type: application/octet-stream
