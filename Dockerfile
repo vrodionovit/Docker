@@ -1,5 +1,5 @@
 # Используем Ubuntu как базовый образ
-FROM ubuntu:latest
+FROM debian:10
 
 # Устанавливаем переменную окружения для неинтерактивной установки пакетов
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,8 +24,6 @@ WORKDIR /OnvifDeviceManager
 # Запускаем autogen.sh
 RUN ./autogen.sh --prefix=/usr
 
-# Запускаем configure
-RUN ./configure
 
 # Создаем deb-пакет
 RUN make deb
