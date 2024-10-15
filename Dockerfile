@@ -1,7 +1,6 @@
 #FROM debian:10
-#FROM dockerhub1.beget.com/library/debian:10
-FROM mirror.gcr.io/library/debian:10
-ENV DEBIAN_FRONTEND=noninteractive
+FROM dockerhub1.beget.com/library/debian:10
+
 
 # Обновляем списки пакетов и устанавливаем необходимые зависимости
 RUN apt-get update && apt-get install -y \
@@ -11,9 +10,12 @@ RUN apt-get update && apt-get install -y \
     make \
     g++ \
     python3-pip \
+    python3-setuptools \
+    python3-wheel \
     bison \
     flex \
     libtool \
+    wget
     libssl-dev \
     zlib1g-dev \
     libasound2-dev \
@@ -25,6 +27,9 @@ RUN apt-get update && apt-get install -y \
     libntlm0-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Обновляем pip и устанавливаем дополнительные инструменты
+RUN pip3 install --upgrade pip && \
+    pip3 install --no-cache-dir meson ninja cmake
 
 WORKDIR /build
 
