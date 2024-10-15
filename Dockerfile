@@ -25,8 +25,6 @@ RUN apt-get update && apt-get install -y \
     libntlm0-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем дополнительные инструменты через pip
-RUN pip3 install meson ninja cmake
 
 WORKDIR /build
 
