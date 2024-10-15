@@ -1,6 +1,6 @@
 #FROM debian:10
-FROM dockerhub1.beget.com/library/debian:10
-
+#FROM dockerhub1.beget.com/library/debian:10
+FROM mirror.gcr.io/library/debian:10
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Обновляем списки пакетов и устанавливаем необходимые зависимости
